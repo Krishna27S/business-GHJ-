@@ -124,18 +124,56 @@ const Header = () => {
         '8 GRAM',
         '10 GRAM'
       ]
+      
+    },
+    'SILVER': {
+      'CATEGORY': [
+        'BANGLES',
+        'BRACELETS',
+        'EARRINGS',
+        'GOLD CHAINS',
+        'PENDANTS',
+        'RINGS',
+        'ENGAGEMENT RINGS',
+        'NECKLACES'
+      ],
+      'EARRINGS TYPE': [
+        'JHUMKAS',
+        'HOOP EARRINGS',
+        'STUD EARRINGS',
+        'DROP EARRINGS'
+      ],
+      'MEN': [
+        'BRACELETS',
+        'CHAINS',
+        'RINGS'
+      ],
+      'SILVER COIN': [
+        '1 GRAM',
+        '2 GRAM',
+        '4 GRAM',
+        '8 GRAM',
+        '10 GRAM'
+      ]
     }
   };
 
   return (
-    <header className="w-full bg-white shadow-sm">
+    <header className="w-full bg-[#FAF3E3] p-6 rounded-lg shadow-lg">
       {/* Top Bar */}
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between py-4">
-          {/* Left Logo */}
-          <a href="/" className="text-2xl font-serif text-gray-800">
-            Ginni House 
-          </a>
+          {/* Left Logo and Brand Name */}
+          <div className="flex items-center space-x-4">
+            <img
+              src="/images/logo2.jpg"
+              alt="Ginni House Logo"
+              className="h-12 w-12 object-contain rounded-full"
+            />
+            <a href="/" className="text-2xl font-serif text-gray-800">
+              Ginni House Jewellers
+            </a>
+          </div>
 
           {/* Search Bar */}
           <div className="flex-1 max-w-2xl mx-8">
@@ -152,14 +190,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Right Logo */}
-          <div className="h-16 w-16">
-            <img
-              src="/images/logo2.jpg" // Add your logo to the public folder
-              alt="Ginni House Logo"
-              className="h-full w-full object-contain"
-            />
-          </div>
+          
         </div>
 
         {/* Main Navigation with Dropdowns */}

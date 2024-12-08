@@ -30,7 +30,7 @@ const ImageGallery = () => {
   };
 
   return (
-    <div className="mt-8 relative">
+    <div className="mt-8 relative bg-[#FAF3E3] p-6 rounded-lg shadow-lg">
       {/* Main Image Container */}
       <div className="w-full h-[600px] relative rounded-lg overflow-hidden shadow-lg">
         {/* Image with transition */}

@@ -3,13 +3,19 @@ import React from 'react';
 
 const ContactPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-[#FAF3E3] p-6 rounded-lg shadow-lg">
       {/* Business Logo and Name */}
-      <div className="text-center mb-12">
-        <a href="/images/logo.jpg" className="inline-block">
-          {/* Replace with your actual logo */}
-          <span className="text-3xl font-serif text-gray-800">Ginni House</span>
-        </a>
+      <div className="text-center mb-12 flex items-center justify-center">
+        <div className="flex items-center space-x-4">
+          <img 
+            src="/images/logo2.jpg" 
+            alt="Ginni House Logo" 
+            className="h-12 w-12 object-contain rounded-full"
+          />
+          <a href="/" className="inline-block">
+            <span className="text-3xl font-serif text-gray-800">Ginni House Jewellers</span>
+          </a>
+        </div>
       </div>
 
       {/* Contact Options */}
@@ -64,38 +70,38 @@ const ContactPage = () => {
 
           {/* Location */}
           <div className="flex items-center justify-center space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors">
-  <div className="w-12 h-12 flex items-center justify-center bg-red-100 rounded-full">
-    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  </div>
-  <div className="flex-1">
-    <h3 className="font-semibold">Visit Us</h3>
-    <p className="text-gray-600 mb-2">Ginni House Jewellers</p>
-    <a 
-      href="https://www.google.com/maps/place/Ginni+house+jewellers/@26.1216362,85.8956459,19.46z/data=!4m14!1m7!3m6!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!2sGinni+house+jewellers!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb!3m5!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-    >
-      <svg 
-        className="w-5 h-5 mr-2" 
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-      >
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth="2" 
-          d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-        />
-      </svg>
-      Open in Google Maps
-    </a>
-  </div>
-</div>
+            <div className="w-12 h-12 flex items-center justify-center bg-red-100 rounded-full">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold">Visit Us</h3>
+              <p className="text-gray-600 mb-2">Ginni House Jewellers, Bakarganj, Laheriasarai, Laheriasarai - 846001</p>
+              <a 
+                href="https://www.google.com/maps/place/Ginni+house+jewellers/@26.1216362,85.8956459,19.46z/data=!4m14!1m7!3m6!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!2sGinni+house+jewellers!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb!3m5!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                <svg 
+                  className="w-5 h-5 mr-2" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="2" 
+                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                  />
+                </svg>
+                Open in Google Maps
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
