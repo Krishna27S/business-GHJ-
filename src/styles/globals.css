@@ -11,3 +11,19 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /* Add to your existing globals.css */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add to your existing globals.css */
+.main-content {
+  position: relative;
+  z-index: 50;
+}
+
+.image-gallery {
+  position: relative;
+  z-index: 40;
+}
