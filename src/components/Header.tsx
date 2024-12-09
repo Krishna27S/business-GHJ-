@@ -108,7 +108,7 @@ const Header = () => {
       {Object.entries(data).map(([category, sections]) => (
         <div key={category} className="group relative">
           <a 
-            href={`/${category.toLowerCase().replace(/\s+/g, '-')}`}
+            href={`/products?category=${category.toLowerCase().replace(/\s+/g, '-')}`}
             className="text-gray-700 hover:text-red-600 py-4 inline-block text-sm font-medium"
           >
             {category}
@@ -125,7 +125,7 @@ const Header = () => {
                     {items.map((item) => (
                       <li key={item}>
                         <a 
-                          href={`/${category.toLowerCase().replace(/\s+/g, '-')}/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                          href={`/products?category=${category.toLowerCase().replace(/\s+/g, '-')}&subcategory=${item.toLowerCase().replace(/\s+/g, '-')}`}
                           className="text-gray-600 hover:text-gray-800 text-sm block"
                         >
                           {item}
@@ -149,7 +149,7 @@ const Header = () => {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex space-x-4">
             <a 
-              href="https://www.google.com/maps/place/Ginni+house+jewellers/@26.1216362,85.8956459,19.46z/data=!4m14!1m7!3m6!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!2sGinni+house+jewellers!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb!3m5!1s0x39edb9731f966623:0x8bfc3e6d7a1b1126!8m2!3d26.1217797!4d85.8960025!16s%2Fg%2F11rv0h0srb"
+              href="https://www.google.com/maps/place/Ginni+house+jewellers/@26.1216362,85.8956459,19.46z"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-red-600"
@@ -176,8 +176,11 @@ const Header = () => {
               </svg>
             </button>
             <div className="absolute right-0 top-full mt-1 bg-white shadow-lg rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
-              <a href="/admin" className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium text-red-600">ADMIN</a>
+              <a href="/admin" className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium text-red-600">OWNER?</a>
               <a href="/logout" className="block px-4 py-2 hover:bg-gray-100 text-sm">Logout</a>
+              
+              
+              
             </div>
           </div>
         </div>
@@ -200,43 +203,23 @@ const Header = () => {
                 scrolled ? 'scale-75' : 'scale-100'
               }`}
             >
-              <img
-                src="/images/logo2.jpg"
-                alt="Ginni House Logo"
-                className="h-20 w-20 object-contain rounded-full"
-              />
+              <a href="/">
+                <img
+                  src="/images/logo2.jpg"
+                  alt="Ginni House Logo"
+                  className="h-20 w-20 object-contain rounded-full"
+                />
+              </a>
             </div>
 
             {/* Right Navigation */}
             <MenuItems data={rightMenuData} align="right" />
           </div>
-
-          {/* Search Bar - Shown when scrolled */}
-          <div 
-            className={`overflow-hidden transition-all duration-300 ${
-              scrolled ? 'h-12 opacity-100 mt-2' : 'h-0 opacity-0'
-            }`}
-          >
-            <div className="relative z-[70]">
-              <input
-                type="text"
-                placeholder="Search for Gold Jewellery, Diamond Jewellery and more..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              />
-              <svg 
-                className="h-5 w-5 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path d="M21 21l-4.35-4.35" />
-              </svg>
-            </div>
-          </div>
         </div>
       </header>
+
+      {/* Add space below the header */}
+      <div className="h-12"></div>
     </div>
   );
 };
