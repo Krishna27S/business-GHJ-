@@ -12,6 +12,7 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
+    "firebase": "^11.0.2",
     "jewelry-store": "file:",
     "next": "15.0.4",
     "react": "^18.3.1",
