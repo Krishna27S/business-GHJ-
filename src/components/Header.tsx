@@ -1,5 +1,9 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '../lib/firebase';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface MenuSection {
   [key: string]: string[];
@@ -15,7 +19,10 @@ interface MenuItemsProps {
 }
 
 const Header = () => {
+  const { user, isAdmin } = useAuth();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const leftMenuData: MenuData = {
     'ALL JEWELLERY': {
@@ -94,6 +101,18 @@ const Header = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await signOut(auth);
+      await router.push('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 200);
@@ -107,12 +126,13 @@ const Header = () => {
     <nav className="flex space-x-8">
       {Object.entries(data).map(([category, sections]) => (
         <div key={category} className="group relative">
-          <a 
+          <Link 
             href={`/products?category=${category.toLowerCase().replace(/\s+/g, '-')}`}
             className="text-gray-700 hover:text-red-600 py-4 inline-block text-sm font-medium"
+            prefetch={false}
           >
             {category}
-          </a>
+          </Link>
           <div 
             className={`absolute ${align === 'left' ? 'left-0' : 'right-0'} top-full bg-white shadow-lg invisible 
               group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 z-[100] min-w-[200px] p-6`}
@@ -124,12 +144,13 @@ const Header = () => {
                   <ul className="space-y-2">
                     {items.map((item) => (
                       <li key={item}>
-                        <a 
+                        <Link 
                           href={`/products?category=${category.toLowerCase().replace(/\s+/g, '-')}&subcategory=${item.toLowerCase().replace(/\s+/g, '-')}`}
                           className="text-gray-600 hover:text-gray-800 text-sm block"
+                          prefetch={false}
                         >
                           {item}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -157,31 +178,41 @@ const Header = () => {
               STORE LOCATOR
             </a>
             <span>/</span>
-            <a href="/feedback" className="hover:text-red-600">FEEDBACK</a>
+            <Link href="/feedback" className="hover:text-red-600">FEEDBACK</Link>
             <span>/</span>
-            <a href="/contact" className="hover:text-red-600">CONTACT</a>
+            <Link href="/contact" className="hover:text-red-600">CONTACT</Link>
           </div>
 
-          {/* Account Dropdown */}
-          <div className="relative group">
-            <button className="flex items-center space-x-1 hover:text-red-600">
-              <span>My Account</span>
-              <svg 
-                className="w-4 h-4 group-hover:transform group-hover:rotate-180 transition-transform" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+          {/* Account Section */}
+          <div className="flex space-x-4">
+            {isAdmin ? (
+              <div className="flex items-center space-x-4">
+                {user?.email && (
+                  <span className="text-gray-600">{user.email}</span>
+                )}
+                <Link 
+                  href="/admin/dashboard" 
+                  className="hover:text-red-600 transition-colors"
+                >
+                  DASHBOARD
+                </Link>
+                <span>/</span>
+                <button 
+                  onClick={handleLogout} 
+                  disabled={isLoading}
+                  className="hover:text-red-600 transition-colors disabled:opacity-50"
+                >
+                  {isLoading ? 'LOGGING OUT...' : 'LOGOUT'}
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/admin" 
+                className="hover:text-red-600 transition-colors"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div className="absolute right-0 top-full mt-1 bg-white shadow-lg rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
-              <a href="/admin" className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium text-red-600">OWNER?</a>
-              <a href="/logout" className="block px-4 py-2 hover:bg-gray-100 text-sm">Logout</a>
-              
-              
-              
-            </div>
+                OWNER?
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -203,13 +234,13 @@ const Header = () => {
                 scrolled ? 'scale-75' : 'scale-100'
               }`}
             >
-              <a href="/">
+              <Link href="/">
                 <img
                   src="/images/logo2.jpg"
                   alt="Ginni House Logo"
                   className="h-20 w-20 object-contain rounded-full"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Right Navigation */}

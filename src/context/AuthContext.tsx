@@ -1,8 +1,8 @@
 // src/context/AuthContext.tsx
-import { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { isAdmin } from '../utils/adminAuth';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -10,15 +10,26 @@ interface AuthContextType {
   loading: boolean;
 }
 
+// List of admin emails
+const ADMIN_EMAILS = [
+  // Add your admin email(s) here
+  'krishnashekhar27@gmail.com',
+  'shekhar.ginnihouse@gmail.com' 
+  // Replace with your actual admin email
+];
+
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAdmin: false,
-  loading: true,
+  loading: true
 });
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Check if current user's email is in admin list
+  const isAdmin = user?.email ? ADMIN_EMAILS.includes(user.email) : false;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -30,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAdmin: isAdmin(user), loading }}>
+    <AuthContext.Provider value={{ user, isAdmin, loading }}>
       {children}
     </AuthContext.Provider>
   );
