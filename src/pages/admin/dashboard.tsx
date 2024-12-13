@@ -10,6 +10,7 @@ import Compressor from 'compressorjs';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import product from '@/src/components/product';
 
 interface Product {
   id: string;
@@ -122,7 +123,6 @@ const Dashboard = () => {
       if (!formData.name.trim() || !formData.price || !formData.weight.trim()) {
         throw new Error('All fields are required');
       }
-
       console.log('Starting product upload...');
       const imageId = uuidv4();
       const storageRef = `products/${imageId}`;

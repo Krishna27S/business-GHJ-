@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, Query } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 
 interface Product {
@@ -21,37 +21,46 @@ const ProductsPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchProducts() {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        console.log('Attempting to fetch products...');
-        let productsQuery;
+        console.log('Starting fetch...', { category });
+        const productsRef = collection(db, 'products');
+        let q: Query = query(productsRef, orderBy('price', 'desc'));
 
         if (category) {
-          productsQuery = query(
-            collection(db, 'products'),
-            where('category', '==', category.toString().toUpperCase())
+          q = query(
+            productsRef,
+            where('category', '==', category.toString().toUpperCase()),
+            orderBy('price', 'desc')
           );
-        } else {
-          productsQuery = collection(db, 'products');
         }
 
-        const querySnapshot = await getDocs(productsQuery);
-        console.log('Products found:', querySnapshot.size);
+        console.log('Collection reference created');
+        const querySnapshot = await getDocs(q);
+        console.log('Documents fetched:', querySnapshot.size);
 
-        const fetchedProducts = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as Product));
+        if (!querySnapshot.empty) {
+          const productsData = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Product[];
 
-        console.log('Processed products:', fetchedProducts);
-        setProducts(fetchedProducts);
-        setLoading(false);
+          console.log('Processed products:', productsData.length);
+          setProducts(productsData);
+        } else {
+          console.log('No products found');
+          setProducts([]);
+        }
       } catch (err) {
-        console.error('Error fetching products:', err);
+        console.error('Detailed error:', err);
         setError('Failed to load products. Please try again later.');
+      } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchProducts();
   }, [category]);
@@ -95,7 +104,7 @@ const ProductsPage = () => {
                       className="w-full h-64 object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/placeholder-image.jpg'; // Add a placeholder image
+                        target.src = '/placeholder-image.jpg';
                       }}
                     />
                   </div>
