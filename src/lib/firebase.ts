@@ -14,8 +14,18 @@ const firebaseConfig = {
     measurementId: "G-D544YRH69G"
 };
 
+import {  FirebaseApp } from 'firebase/app';
+
+let app: FirebaseApp;
+try {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+} catch (error) {
+    console.error('Firebase initialization error:', error);
+    throw error;
+}
+
 // Initialize Firebase only if it hasn't been initialized already
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+// const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 
 // Get Auth instance
 export const auth = getAuth(app);
@@ -25,3 +35,5 @@ export const db = getFirestore(app);
 
 // Get Storage instance
 export const storage = getStorage(app);
+
+export {app}

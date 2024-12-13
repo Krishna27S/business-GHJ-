@@ -4,8 +4,8 @@ const GalleryPage = () => {
   // You'll add your images to the public/images directory
   // and reference them like this
   const images = [
-    '/images/image1.jpg',
-    '/images/image2.jpg',
+    '/images/image0.jpg',
+    '/images/image0.jpg',
     // Add more images as needed
   ];
 

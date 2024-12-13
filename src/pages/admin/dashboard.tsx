@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// src/pages/admin/dashboard.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
 import { db, storage } from '../../lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { collection, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, getDocs, serverTimestamp } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import Compressor from 'compressorjs';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/router';
@@ -20,6 +20,8 @@ interface Product {
   metalType: string;
   imageUrl: string;
   storageRef?: string;
+  createdAt?: Date;
+  createdBy?: string;
 }
 
 const categories = [
@@ -31,6 +33,7 @@ const metalTypes = ['GOLD', 'SILVER', 'PLATINUM', 'ROSE GOLD'];
 
 const Dashboard = () => {
   const router = useRouter();
+  const auth = getAuth();
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
@@ -105,8 +108,19 @@ const Dashboard = () => {
     setUploadProgress(0);
 
     try {
+      // Check authentication
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('You must be authenticated to add products');
+      }
+
       if (!image) {
         throw new Error('Please select an image');
+      }
+
+      // Validate form data
+      if (!formData.name.trim() || !formData.price || !formData.weight.trim()) {
+        throw new Error('All fields are required');
       }
 
       console.log('Starting product upload...');
@@ -123,7 +137,7 @@ const Dashboard = () => {
         },
         (error) => {
           console.error('Upload error:', error);
-          toast.error('Upload failed');
+          toast.error(`Upload failed: ${error.message}`);
           setLoading(false);
         },
         async () => {
@@ -132,19 +146,24 @@ const Dashboard = () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             
             console.log('Adding to Firestore...');
-            const docRef = await addDoc(collection(db, 'products'), {
-              name: formData.name,
+            const productData = {
+              name: formData.name.trim(),
               price: parseFloat(formData.price),
-              weight: formData.weight,
+              weight: formData.weight.trim(),
               category: formData.category,
               metalType: formData.metalType,
               imageUrl: downloadURL,
               storageRef: storageRef,
-              createdAt: new Date()
-            });
+              createdAt: serverTimestamp(),
+              createdBy: user.uid,
+              updatedAt: serverTimestamp()
+            };
+
+            const docRef = await addDoc(collection(db, 'products'), productData);
 
             console.log('Product added with ID:', docRef.id);
             
+            // Reset form
             setFormData({
               name: '',
               price: '',
@@ -156,10 +175,16 @@ const Dashboard = () => {
             setPreviewUrl('');
             setUploadProgress(0);
             toast.success('Product added successfully!');
-            fetchProducts();
-          } catch (error) {
+            await fetchProducts();
+          } catch (error: any) {
             console.error('Error saving to Firestore:', error);
-            toast.error('Failed to save product');
+            // Clean up uploaded image if Firestore save fails
+            try {
+              await deleteObject(storageRefFull);
+            } catch (deleteError) {
+              console.error('Error deleting uploaded image:', deleteError);
+            }
+            toast.error(`Failed to save product: ${error.message}`);
           }
           setLoading(false);
         }
@@ -178,6 +203,12 @@ const Dashboard = () => {
 
     setDeleteLoading(product.id);
     try {
+      // Check authentication
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('You must be authenticated to delete products');
+      }
+
       console.log('Starting product deletion...');
       
       // First delete from Firestore
@@ -197,9 +228,9 @@ const Dashboard = () => {
 
       toast.success('Product deleted successfully');
       setProducts(prev => prev.filter(p => p.id !== product.id));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting product:', error);
-      toast.error('Failed to delete product');
+      toast.error(`Failed to delete product: ${error.message}`);
     } finally {
       setDeleteLoading(null);
     }

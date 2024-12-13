@@ -13,7 +13,7 @@
     "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
     "compressorjs": "^1.2.1",
-    "firebase": "^11.0.2",
+    "firebase": "^11.1.0",
     "jewelry-store": "file:",
     "next": "15.0.4",
     "react": "^18.3.1",
